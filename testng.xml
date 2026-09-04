@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="API Automation Test Suite" parallel="methods" thread-count="10" verbose="1">
+
+    <listeners>
+        <listener class-name="com.api.automation.listeners.TestListener"/>
+    </listeners>
+
+    <test name="User API Tests">
+        <classes>
+            <class name="com.api.automation.tests.smoke.UserApiSmokeTests"/>
+            <class name="com.api.automation.tests.negative.UserApiNegativeTests"/>
+            <class name="com.api.automation.tests.contract.UserApiContractTests"/>
+        </classes>
+    </test>
+
+</suite>

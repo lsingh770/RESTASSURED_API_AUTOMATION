@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Contract Test Suite" parallel="methods" thread-count="5" verbose="1">
+
+    <listeners>
+        <listener class-name="com.api.automation.listeners.TestListener"/>
+    </listeners>
+
+    <test name="Contract Tests">
+        <groups>
+            <run>
+                <include name="contract"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="com.api.automation.tests.contract.UserApiContractTests"/>
+        </classes>
+    </test>
+
+</suite>

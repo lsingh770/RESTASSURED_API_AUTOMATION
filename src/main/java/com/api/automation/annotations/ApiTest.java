@@ -1,0 +1,19 @@
+package com.api.automation.annotations;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface ApiTest {
+
+    String requirement() default "";
+
+    String endpoint() default "";
+
+    String category() default "";
+
+    String description() default "";
+}

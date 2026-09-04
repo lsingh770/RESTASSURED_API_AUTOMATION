@@ -1,0 +1,126 @@
+name: API Automation Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to run tests against'
+        required: true
+        default: 'qa'
+        type: choice
+        options:
+          - local
+          - qa
+          - staging
+      suite:
+        description: 'Test suite to run'
+        required: true
+        default: 'smoke'
+        type: choice
+        options:
+          - smoke
+          - regression
+          - negative
+          - contract
+          - all
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Set environment variables
+        run: |
+          echo "ENV=${{ github.event.inputs.environment || 'qa' }}" >> $GITHUB_ENV
+          echo "SUITE=${{ github.event.inputs.suite || 'smoke' }}" >> $GITHUB_ENV
+
+      - name: Run smoke tests on PR
+        if: github.event_name == 'pull_request'
+        run: mvn clean test -Denv=qa -P smoke
+
+      - name: Run specified test suite
+        if: github.event_name != 'pull_request'
+        run: |
+          if [ "${{ env.SUITE }}" == "all" ]; then
+            mvn clean test -Denv=${{ env.ENV }}
+          else
+            mvn clean test -Denv=${{ env.ENV }} -P${{ env.SUITE }}
+          fi
+
+      - name: Generate Allure Report
+        if: always()
+        run: mvn allure:report
+
+      - name: Upload Allure Results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: allure-results
+          path: target/allure-results/
+          retention-days: 7
+
+      - name: Upload Allure Report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: allure-report
+          path: target/allure-report/
+          retention-days: 7
+
+      - name: Upload Test Logs
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-logs
+          path: target/logs/
+          retention-days: 7
+
+      - name: Publish Test Results
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: TestNG Results
+          path: target/surefire-reports/testng-results.xml
+          reporter: java-junit
+
+      - name: Comment PR with Test Results
+        if: github.event_name == 'pull_request' && always()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const testResults = fs.readFileSync('target/surefire-reports/testng-results.xml', 'utf8');
+            const passed = (testResults.match(/passed="(\d+)"/)?.[1] || 0);
+            const failed = (testResults.match(/failed="(\d+)"/)?.[1] || 0);
+            const skipped = (testResults.match(/skipped="(\d+)"/)?.[1] || 0);
+
+            const comment = `## 🧪 API Test Results
+
+            | Status | Count |
+            |--------|-------|
+            | ✅ Passed | ${passed} |
+            | ❌ Failed | ${failed} |
+            | ⏭️ Skipped | ${skipped} |
+
+            [View detailed Allure report in artifacts](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
