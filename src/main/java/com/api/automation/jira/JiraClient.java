@@ -134,7 +134,8 @@ public class JiraClient {
         }
     }
 
-    private JSONObject buildCreateIssuePayload(String summary, String description, FailureCategory category, String signature) {
+        private JSONObject buildCreateIssuePayload(String summary, String description, FailureCategory category, String signature)
+            throws org.json.JSONException {
         JSONObject payload = new JSONObject();
 
         JSONObject fields = new JSONObject();
