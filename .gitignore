@@ -44,6 +44,7 @@ Thumbs.db
 **/*secret*
 **/*password*
 **/*token*
+!src/main/java/com/api/automation/auth/TokenCache.java
 
 # Temporary files
 *.tmp
