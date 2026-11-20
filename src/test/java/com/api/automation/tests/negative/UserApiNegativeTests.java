@@ -20,7 +20,7 @@ public class UserApiNegativeTests {
 
     private UserApiClient userApi;
 
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     public void setup() {
         userApi = new UserApiClient();
     }

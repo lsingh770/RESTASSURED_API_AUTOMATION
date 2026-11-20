@@ -20,7 +20,7 @@ public class UserApiContractTests {
 
     private UserApiClient userApi;
 
-    @BeforeClass
+    @BeforeClass(alwaysRun = true)
     public void setup() {
         userApi = new UserApiClient();
     }
