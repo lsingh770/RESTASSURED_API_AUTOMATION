@@ -11,7 +11,7 @@ public final class ApiEndpoints {
 
     // User Endpoints
     public static final String USERS = BASE_PATH + "/users";
-    public static final String USER_BY_ID = BASE_PATH + "/users/{id}";
+    public static final String USER_BY_ID = "/users/{id}";
     public static final String USER_SEARCH = BASE_PATH + "/users/search";
 
     // Authentication Endpoints

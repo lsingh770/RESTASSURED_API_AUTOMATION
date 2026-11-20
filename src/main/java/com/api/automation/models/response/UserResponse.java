@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public class UserResponse {
 
     @JsonProperty("id")
-    private String id;
+    private int id;
 
     @JsonProperty("firstName")
     private String firstName;

@@ -84,7 +84,7 @@ pipeline {
                     <p><strong>Duration:</strong> ${currentBuild.durationString}</p>
                     <p><a href="${BUILD_URL}allure">View Allure Report</a></p>
                 """,
-                to: '${DEFAULT_RECIPIENTS}',
+                to: env.DEFAULT_RECIPIENTS,
                 mimeType: 'text/html'
             )
         }
@@ -102,7 +102,7 @@ pipeline {
                     <p><a href="${BUILD_URL}allure">View Allure Report</a></p>
                     <p><a href="${BUILD_URL}console">View Console Output</a></p>
                 """,
-                to: '${DEFAULT_RECIPIENTS}',
+                to: env.DEFAULT_RECIPIENTS,
                 mimeType: 'text/html'
             )
         }
