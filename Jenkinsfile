@@ -59,8 +59,8 @@ pipeline {
         always {
             echo "Archiving test results and reports..."
 
-            // Publish TestNG results
-            junit allowEmptyResults: true, testResults: '**/target/surefire-reports/testng-results.xml'
+            // Publish Surefire's JUnit-compatible test report
+            junit allowEmptyResults: true, testResults: 'target/surefire-reports/TEST-*.xml'
 
             // Publish Allure report
             allure includeProperties: false, jdk: '', results: [[path: 'target/allure-results']]
