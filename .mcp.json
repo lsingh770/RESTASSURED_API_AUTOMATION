@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "java-api-automation": {
+      "type": "stdio",
+      "command": "/Library/Frameworks/Python.framework/Versions/3.13/bin/python3",
+      "args": [
+        "/Users/lokesh/RESTASSURED_API_AUTOMATION/mcp-server/server.py"
+      ],
+      "env": {
+        "AUTOMATION_PROJECT_DIR": "/Users/lokesh/RESTASSURED_API_AUTOMATION",
+        "JAVA_HOME": "/Users/lokesh/Library/Java/JavaVirtualMachines/corretto-21.0.12/Contents/Home"
+      }
+    }
+  }
+}
